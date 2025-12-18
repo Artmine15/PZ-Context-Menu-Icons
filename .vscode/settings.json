@@ -1,0 +1,15 @@
+{
+    "Lua.runtime.version": "Lua 5.1",
+    "Lua.workspace.library": ["D:/SteamLibrary/steamapps/common/ProjectZomboid/media/lua/"],
+    "Lua.diagnostics.globals": [
+        "getPlayer",
+        "getPlayerByOnlineID",
+        "Events",
+        "ISToolTip",
+        "getWorldObjects",
+        "getSpecificPlayer",
+        "getCore",
+        "getText",
+        "getTexture"
+    ]
+}
