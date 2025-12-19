@@ -10,6 +10,9 @@
         "getSpecificPlayer",
         "getCore",
         "getText",
-        "getTexture"
+        "getTexture",
+        "DebugLog",
+        "getDebug",
+        "DebugType"
     ]
 }

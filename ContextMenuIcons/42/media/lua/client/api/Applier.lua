@@ -1,38 +1,48 @@
-local iconsPath = "media/ui/icons/";
-local function getIconPath(iconPack, iconName)
-    return iconsPath .. "/" .. iconPack .. "/" .. iconName;
-end
+require "Namespaces"
+require "api/Utils"
+require "ConfigurationList"
 
-local function getOptionFromContext(optionName, context)
-    local option = context:getOptionFromName(getText(optionName));
-    return option;
-end
-
-local iconTextures = {}
-local function getCachedIconTexture(iconName)
-    path = getIconPath("simple", iconName)
-    if not iconTextures[path] then
-        iconTextures[path] = getTexture(path)
-    end
-    return iconTextures[path]
-end
-
-local function setIcon(iconName, option)
-    option.iconTexture = getCachedIconTexture(iconName);
-end
+local utils = ContextMenuIcons.Utils
 
 local function applyIcons(player, context)
-    if not context then return end
+    if not context then
+        utils.log(DebugType.Mod, "Invalid context")
+        return
+    end
 
-    for optionName, details in pairs(ContextMenuIcons.options) do
-        local option = getOptionFromContext(optionName, context)
-        if not option then return end
+    local currentIconPack = "simple"
 
-        if type(details) == "string" then
-            setIcon(details, option)
+    local iconPack = ContextMenuIcons.configurations[currentIconPack]
+
+    for optionName, details in pairs(iconPack.options) do
+        local option = utils.getOptionFromContext(context, optionName)
+
+        if option then
+            if type(details) == "string" then
+                utils.setIcon(option, currentIconPack, details)
+            elseif type(details) == "table" then
+                if details.iconTextureName ~= nil then
+                    utils.setIcon(option, currentIconPack, details.iconTextureName)
+                end
+
+                local subContext = context:getSubMenu(option.subOption)
+
+                if not subContext then
+                    utils.log(DebugType.Mod, "Invalid subContext")
+                    return
+                end
+
+                for subOptionName, iconTextureName in pairs(details.subOptions) do
+                    local subOption = utils.getOptionFromContext(subContext, subOptionName)
+                    if subOption then
+                        utils.setIcon(subOption, currentIconPack, iconTextureName)
+                    end
+                end
+            end
         end
     end
 end
 
 --Events.OnPreFillWorldObjectContextMenu.Add(getCachedIconTexture)
+Events.OnFillInventoryObjectContextMenu.Add(applyIcons)
 Events.OnFillWorldObjectContextMenu.Add(applyIcons)
