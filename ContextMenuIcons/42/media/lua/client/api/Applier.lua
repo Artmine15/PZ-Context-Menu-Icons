@@ -27,15 +27,12 @@ local function applyIcons(player, context)
 
                 local subContext = context:getSubMenu(option.subOption)
 
-                if not subContext then
-                    utils.log(DebugType.Mod, "Invalid subContext")
-                    return
-                end
-
-                for subOptionName, iconTextureName in pairs(details.subOptions) do
+                if subContext then
+                    for subOptionName, iconTextureName in pairs(details.subOptions) do
                     local subOption = utils.getOptionFromContext(subContext, subOptionName)
-                    if subOption then
-                        utils.setIcon(subOption, currentIconPack, iconTextureName)
+                        if subOption then
+                            utils.setIcon(subOption, currentIconPack, iconTextureName)
+                        end
                     end
                 end
             end
