@@ -4,42 +4,89 @@ require "ConfigurationList"
 
 local utils = ContextMenuIcons.Utils
 
-local function applyIcons(player, context)
-    if not context then
-        utils.log(DebugType.Mod, "Invalid context")
-        return
+local currentIconPack = "simple"
+local iconPack = ContextMenuIcons.configurations[currentIconPack]
+
+local staticNamedInventoryIcons = {}
+local staticNamedWorldIcons = {}
+local dynamicNamedInventoryIcons = {}
+local dynamicNamedWorldIcons = {}
+
+local function createIconTables(options, staticNamedIcons, dynamicNamedIcons)
+    for optionName, details in pairs(options) do
+        local localizedText = getText(optionName)
+
+        if not string.find(localizedText, "%", 1, true) then
+            staticNamedIcons[localizedText] = details
+        else
+            local pattern = localizedText:gsub("([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1")
+            pattern = pattern:gsub("%%%%%d", ".*")
+            --table.insert(dynamicNamedIcons, { pattern = "^" .. pattern .. "$", details = details })
+            dynamicNamedIcons["^" .. pattern .. "$"] = details
+        end
     end
+end
 
-    local currentIconPack = "simple"
+local function createIconAllTables()
+    createIconTables(iconPack.options.inventory, staticNamedInventoryIcons, dynamicNamedInventoryIcons)
+    createIconTables(iconPack.options.world, staticNamedWorldIcons, dynamicNamedWorldIcons)
+end
 
-    local iconPack = ContextMenuIcons.configurations[currentIconPack]
+local function applyIcons(context, staticNamedIcons, dynamicNamedIcons)
+    if not context or not context.options then return end
 
-    for optionName, details in pairs(iconPack.options) do
-        local option = utils.getOptionFromContext(context, optionName)
+    for i = 1, #context.options do
+        local option = context.options[i]
+        local details
 
-        if option then
-            if type(details) == "string" then
-                utils.setIcon(option, currentIconPack, details)
-            elseif type(details) == "table" then
-                if details.iconTextureName ~= nil then
-                    utils.setIcon(option, currentIconPack, details.iconTextureName)
+        if option.name then
+            details = staticNamedIcons[option.name]
+
+            if not details then
+                for pattern, data in pairs(dynamicNamedIcons) do
+                    if string.match(option.name, pattern) then
+                        details = data
+                        break
+                    end
                 end
+            end
 
-                local subContext = context:getSubMenu(option.subOption)
+            if details then
+                if type(details) == "string" then
+                    utils.setIcon(option, currentIconPack, details)
+                elseif type(details) == "table" then
+                    if details.iconTextureName then
+                        utils.setIcon(option, currentIconPack, details.iconTextureName)
+                    end
 
-                if subContext then
-                    for subOptionName, iconTextureName in pairs(details.subOptions) do
-                    local subOption = utils.getOptionFromContext(subContext, subOptionName)
-                        if subOption then
-                            utils.setIcon(subOption, currentIconPack, iconTextureName)
+                    if details.subOptions and option.subOption then
+                        local subContext = context:getSubMenu(option.subOption)
+                        if subContext then
+                            local subStatic = {}
+                            local subDynamic = {}
+                            createIconTables(details.subOptions, subStatic, subDynamic)
+                            applyIcons(subContext, subStatic, subDynamic)
                         end
                     end
+                end
+            elseif option.subOption then
+                local subContext = context:getSubMenu(option.subOption)
+                if subContext then
+                    applyIcons(subContext, staticNamedIcons, dynamicNamedIcons)
                 end
             end
         end
     end
 end
 
---Events.OnPreFillWorldObjectContextMenu.Add(getCachedIconTexture)
-Events.OnFillInventoryObjectContextMenu.Add(applyIcons)
-Events.OnFillWorldObjectContextMenu.Add(applyIcons)
+local function applyInventoryIcons(player, context)
+    applyIcons(context, staticNamedInventoryIcons, dynamicNamedInventoryIcons)
+end
+
+local function applyWorldIcons(player, context)
+    applyIcons(context, staticNamedWorldIcons, dynamicNamedWorldIcons)
+end
+
+Events.OnGameStart.Add(createIconAllTables)
+Events.OnFillInventoryObjectContextMenu.Add(applyInventoryIcons)
+Events.OnFillWorldObjectContextMenu.Add(applyWorldIcons)

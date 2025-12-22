@@ -1,8 +1,8 @@
 ContextMenuIcons.iconPacks = ContextMenuIcons.iconPacks or {}
 ContextMenuIcons.iconPacks.simple = ContextMenuIcons.iconPacks.simple or {}
+ContextMenuIcons.iconPacks.simple.options = ContextMenuIcons.iconPacks.simple.options or {}
 
-ContextMenuIcons.iconPacks.simple.options = {
-    -- Inventory object context
+ContextMenuIcons.iconPacks.simple.options.inventory = {
     ["IGUI_invpanel_Inspect"] = "Inspect.png",
     ["ContextMenu_More"] = "Stub.png",
     ["ContextMenu_Attach"] = "Attach.png",
@@ -26,6 +26,7 @@ ContextMenuIcons.iconPacks.simple.options = {
     ["ContextMenu_Grab_all"] = "GrabAll.png",
 
     ["ContextMenu_Drop"] = "Drop.png",
+    ["ContextMenu_PutInContainer"] = "PutInContainer.png",
 
     ["ContextMenu_PlaceItemOnGround"] = {
         iconTextureName = "Place.png",
@@ -48,10 +49,18 @@ ContextMenuIcons.iconPacks.simple.options = {
             ["ContextMenu_Eat_All"] = "Full.png"
         }
     },
+}
 
-    -- World object context
+ContextMenuIcons.iconPacks.simple.options.world = {
     ["ContextMenu_SitGround"] = "SitOnGround.png",
     ["ContextMenu_Walk_to"] = "WalkTo.png",
+
+    ["ContextMenu_SleepOnGround"] = "SleepOnGround.png",
+    ["ContextMenu_Sleep"] = "Sleep.png",
+    ["ContextMenu_Rest"] = "Rest.png",
+    ["ContextMenu_Wash"] = "Wash.png",
+    ["ContextMenu_WashAllClothing"] = "Stub.png",
+    ["ContextMenu_Drink"] = "Drink.png",
 
     ["ContextMenu_Close_door"] = "CloseDoor.png",
     ["ContextMenu_Open_door"] = "OpenDoor.png",
