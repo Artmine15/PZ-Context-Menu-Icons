@@ -21,7 +21,6 @@ local function createIconTables(options, staticNamedIcons, dynamicNamedIcons)
         else
             local pattern = localizedText:gsub("([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1")
             pattern = pattern:gsub("%%%%%d", ".*")
-            --table.insert(dynamicNamedIcons, { pattern = "^" .. pattern .. "$", details = details })
             dynamicNamedIcons["^" .. pattern .. "$"] = details
         end
     end
@@ -69,7 +68,8 @@ local function applyIcons(context, staticNamedIcons, dynamicNamedIcons)
                         end
                     end
                 end
-            elseif option.subOption then
+            elseif not details and option.subOption then
+                -- Pass through world object option like "Sink", "Bed" and etc.
                 local subContext = context:getSubMenu(option.subOption)
                 if subContext then
                     applyIcons(subContext, staticNamedIcons, dynamicNamedIcons)
