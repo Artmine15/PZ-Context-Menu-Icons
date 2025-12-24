@@ -165,4 +165,6 @@ ContextMenuIcons.iconPacks.simple.options.world = {
             ["ContextMenu_RemoveGrass"] = aliases.removeGrass
         }
     },
+
+    ["ContextMenu_GeneratorInfo"] = aliases.stub,
 }

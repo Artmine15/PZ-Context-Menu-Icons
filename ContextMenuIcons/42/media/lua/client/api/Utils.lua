@@ -49,4 +49,5 @@ end
 
 function v.setIcon(option, packName, iconTextureName)
     option.iconTexture = getCachedIconTexture(packName, iconTextureName);
+    option.color = {r=1, g=1, b=1, a=0.5}
 end

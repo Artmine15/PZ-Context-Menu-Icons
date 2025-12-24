@@ -4,8 +4,8 @@ ContextMenuIcons.iconPacks.test.options = ContextMenuIcons.iconPacks.test.option
 
 ContextMenuIcons.iconPacks.test.options.aliases = {
     sitOnGround = "32.png",
-    walkTo = "64.png",
-    sleepOnGround = "96.png"
+    walkTo = "642.png",
+    sleepOnGround = "962.png"
 }
 
 local aliases = ContextMenuIcons.iconPacks.test.options.aliases
