@@ -1,6 +1,6 @@
 require "Namespaces"
-require "simple/Configuration"
-require "test/Configuration"
+require "iconPacks/simple/Configuration"
+require "iconPacks/test/Configuration"
 
 ContextMenuIcons.configurations = {
     ["simple"] = ContextMenuIcons.iconPacks.simple,

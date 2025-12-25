@@ -4,9 +4,9 @@ ContextMenuIcons.Utils = ContextMenuIcons.Utils or {}
 local v = ContextMenuIcons.Utils
 
 function v.log(debugType, message)
-    if getDebug() == false then return end
+    if getDebug() == false or message == nil then return end
     
-    DebugLog.log(debugType, message)
+    DebugLog.log(debugType, tostring(message))
 end
 
 local iconsPath = "media/ui/icons";
@@ -47,7 +47,11 @@ local function getCachedIconTexture(packName, iconTextureName)
     return iconTextures[path]
 end
 
-function v.setIcon(option, packName, iconTextureName)
+function v.resetIconTexturesCache()
+    iconTextures = {}
+end
+
+function v.setIcon(option, packName, iconTextureName, color)
     option.iconTexture = getCachedIconTexture(packName, iconTextureName);
-    option.color = {r=1, g=1, b=1, a=0.5}
+    option.color = ContextMenuIcons.preferences.iconsColor or {r = 1, g = 1, b = 1, a = 1}
 end
