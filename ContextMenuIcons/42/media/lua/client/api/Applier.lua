@@ -1,13 +1,11 @@
 require "Namespaces"
 require "api/Utils"
+require "api/IconHandler"
 require "iconPacks/ConfigurationList"
 require "ModOptions"
 
 local utils = ContextMenuIcons.Utils
-
-local currentIconPack = "simple"
-local iconPack = ContextMenuIcons.configurations[currentIconPack]
-local iconsColor = ContextMenuIcons.preferences.iconsColor
+local iconHandler = ContextMenuIcons.IconHandler
 
 local staticNamedInventoryIcons = {}
 local staticNamedWorldIcons = {}
@@ -29,6 +27,8 @@ local function createIconTables(options, staticNamedIcons, dynamicNamedIcons)
 end
 
 local function createIconAllTables()
+    local iconPack = ContextMenuIcons.configurations["simple"--[[ContextMenuIcons.preferences.iconPack]]]
+
     createIconTables(iconPack.options.inventory, staticNamedInventoryIcons, dynamicNamedInventoryIcons)
     createIconTables(iconPack.options.world, staticNamedWorldIcons, dynamicNamedWorldIcons)
 end
@@ -36,6 +36,9 @@ end
 local function applyIcons(context, staticNamedIcons, dynamicNamedIcons)
     --utils.log(DebugType.Mod, "r: " .. iconsColor.r .. ", g: " .. iconsColor.g .. ", b: " .. iconsColor.b .. ", a: " .. iconsColor.a)
     if not context or not context.options then return end
+
+    local iconsColor = ContextMenuIcons.preferences.iconsColor
+    local iconPack = "simple"
 
     for i = 1, #context.options do
         local option = context.options[i]
@@ -55,10 +58,10 @@ local function applyIcons(context, staticNamedIcons, dynamicNamedIcons)
 
             if details then
                 if type(details) == "string" then
-                    utils.setIcon(option, currentIconPack, details, iconsColor)
+                    iconHandler.setIcon(option, iconPack, details, iconsColor)
                 elseif type(details) == "table" then
                     if details.iconTextureName then
-                        utils.setIcon(option, currentIconPack, details.iconTextureName, iconsColor)
+                        iconHandler.setIcon(option, iconPack, details.iconTextureName, iconsColor)
                     end
 
                     if details.subOptions and option.subOption then
