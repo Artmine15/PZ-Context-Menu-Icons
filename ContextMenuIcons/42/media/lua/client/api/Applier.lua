@@ -6,7 +6,6 @@ require "ModPreferences"
 
 local utils = ContextMenuIcons.Utils
 local iconHandler = ContextMenuIcons.IconHandler
-local modPreferences = ContextMenuIcons.ModPreferences
 
 local staticNamedInventoryIcons = {}
 local staticNamedWorldIcons = {}
@@ -28,7 +27,7 @@ local function createIconTables(options, staticNamedIcons, dynamicNamedIcons)
 end
 
 local function createAllIconTables()
-    local iconPack = ContextMenuIcons.configurations[ContextMenuIcons.preferences.iconPack]
+    local iconPack = ContextMenuIcons.configurations[ContextMenuIcons.preferences.iconPackName]
 
     createIconTables(iconPack.options.inventory, staticNamedInventoryIcons, dynamicNamedInventoryIcons)
     createIconTables(iconPack.options.world, staticNamedWorldIcons, dynamicNamedWorldIcons)
@@ -37,8 +36,8 @@ end
 local function applyIcons(context, staticNamedIcons, dynamicNamedIcons)
     if not context or not context.options then return end
 
+    local iconPackName = ContextMenuIcons.preferences.iconPackName
     local iconsColor = ContextMenuIcons.preferences.iconsColor
-    local iconPack = ContextMenuIcons.preferences.iconPack
 
     for i = 1, #context.options do
         local option = context.options[i]
@@ -58,10 +57,10 @@ local function applyIcons(context, staticNamedIcons, dynamicNamedIcons)
 
             if details then
                 if type(details) == "string" then
-                    iconHandler.setIcon(option, iconPack, details, iconsColor)
+                    iconHandler.setIcon(option, iconPackName, details, iconsColor)
                 elseif type(details) == "table" then
                     if details.iconTextureName then
-                        iconHandler.setIcon(option, iconPack, details.iconTextureName, iconsColor)
+                        iconHandler.setIcon(option, iconPackName, details.iconTextureName, iconsColor)
                     end
 
                     if details.subOptions and option.subOption then

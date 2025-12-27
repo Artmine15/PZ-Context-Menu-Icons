@@ -1,6 +1,11 @@
 ContextMenuIcons.iconPacks = ContextMenuIcons.iconPacks or {}
 ContextMenuIcons.iconPacks.simple = ContextMenuIcons.iconPacks.simple or {}
+
 ContextMenuIcons.iconPacks.simple.options = ContextMenuIcons.iconPacks.simple.options or {}
+
+ContextMenuIcons.iconPacks.simple.settings = {
+    isColorable = true
+}
 
 ContextMenuIcons.iconPacks.simple.options.aliases = {
     stub = "Stub.png",
