@@ -12,6 +12,13 @@ local staticNamedWorldIcons = {}
 local dynamicNamedInventoryIcons = {}
 local dynamicNamedWorldIcons = {}
 
+local function resetIconTables()
+    staticNamedInventoryIcons = {}
+    staticNamedWorldIcons = {}
+    dynamicNamedInventoryIcons = {}
+    dynamicNamedWorldIcons = {}
+end
+
 local function createIconTables(options, staticNamedIcons, dynamicNamedIcons)
     for optionName, details in pairs(options) do
         local localizedText = getText(optionName)
@@ -29,6 +36,7 @@ end
 local function createAllIconTables()
     local iconPack = ContextMenuIcons.configurations[ContextMenuIcons.preferences.iconPackName]
 
+    resetIconTables()
     createIconTables(iconPack.options.inventory, staticNamedInventoryIcons, dynamicNamedInventoryIcons)
     createIconTables(iconPack.options.world, staticNamedWorldIcons, dynamicNamedWorldIcons)
 end
@@ -92,7 +100,7 @@ local function applyWorldIcons(player, context)
     applyIcons(context, staticNamedWorldIcons, dynamicNamedWorldIcons)
 end
 
-ContextMenuIcons.Events.OnPreferencesApplied(iconHandler.resetIconTexturesCache())
+ContextMenuIcons.Events.OnPreferencesApplied(function() iconHandler.resetIconTexturesCache() end)
 ContextMenuIcons.Events.OnPreferencesApplied(createAllIconTables)
 Events.OnFillInventoryObjectContextMenu.Add(applyInventoryIcons)
 Events.OnFillWorldObjectContextMenu.Add(applyWorldIcons)
