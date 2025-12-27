@@ -2,10 +2,11 @@ require "Namespaces"
 require "api/Utils"
 require "api/IconHandler"
 require "iconPacks/ConfigurationList"
-require "ModOptions"
+require "ModPreferences"
 
 local utils = ContextMenuIcons.Utils
 local iconHandler = ContextMenuIcons.IconHandler
+local modPreferences = ContextMenuIcons.ModPreferences
 
 local staticNamedInventoryIcons = {}
 local staticNamedWorldIcons = {}
@@ -26,19 +27,18 @@ local function createIconTables(options, staticNamedIcons, dynamicNamedIcons)
     end
 end
 
-local function createIconAllTables()
-    local iconPack = ContextMenuIcons.configurations["simple"--[[ContextMenuIcons.preferences.iconPack]]]
+local function createAllIconTables()
+    local iconPack = ContextMenuIcons.configurations[ContextMenuIcons.preferences.iconPack]
 
     createIconTables(iconPack.options.inventory, staticNamedInventoryIcons, dynamicNamedInventoryIcons)
     createIconTables(iconPack.options.world, staticNamedWorldIcons, dynamicNamedWorldIcons)
 end
 
 local function applyIcons(context, staticNamedIcons, dynamicNamedIcons)
-    --utils.log(DebugType.Mod, "r: " .. iconsColor.r .. ", g: " .. iconsColor.g .. ", b: " .. iconsColor.b .. ", a: " .. iconsColor.a)
     if not context or not context.options then return end
 
     local iconsColor = ContextMenuIcons.preferences.iconsColor
-    local iconPack = "simple"
+    local iconPack = ContextMenuIcons.preferences.iconPack
 
     for i = 1, #context.options do
         local option = context.options[i]
@@ -93,7 +93,7 @@ local function applyWorldIcons(player, context)
     applyIcons(context, staticNamedWorldIcons, dynamicNamedWorldIcons)
 end
 
---Events.OnResolutionChange.Add(utils.resetIconTexturesCache())
-Events.OnGameStart.Add(createIconAllTables)
+ContextMenuIcons.Events.OnPreferencesApplied(iconHandler.resetIconTexturesCache())
+ContextMenuIcons.Events.OnPreferencesApplied(createAllIconTables)
 Events.OnFillInventoryObjectContextMenu.Add(applyInventoryIcons)
 Events.OnFillWorldObjectContextMenu.Add(applyWorldIcons)

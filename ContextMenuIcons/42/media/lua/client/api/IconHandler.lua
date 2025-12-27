@@ -1,7 +1,10 @@
 require "Namespaces"
+require "api/Utils"
 
 ContextMenuIcons.IconHandler = ContextMenuIcons.IconHandler or {}
 local v = ContextMenuIcons.IconHandler
+
+local utils = ContextMenuIcons.Utils
 
 local iconsPath = "media/ui/icons";
 function v.getIconPath(packName, iconTextureName)
@@ -15,7 +18,7 @@ local function getCachedIconTexture(packName, iconTextureName)
         iconTextures[path] = getTexture(path)
 
         if not iconTextures[path] then
-            v.log(DebugType.Mod, "No icon found from path: " .. path)
+            utils.log("No icon found from path: " .. path)
             return
         end
     end
