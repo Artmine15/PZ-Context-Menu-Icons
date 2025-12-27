@@ -1,1 +1,0 @@
-ContextMenuIcons = ContextMenuIcons or {}

@@ -1,12 +1,10 @@
-require "Namespaces"
-require "iconPacks/ConfigurationList"
-require "api/Utils"
+require "cmic/Initialization"
+require "cmic/IconPacksList"
+require "cmic/Utils"
 
-ContextMenuIcons.ModPreferences = ContextMenuIcons.ModPreferences or {}
-local v = ContextMenuIcons.ModPreferences
-
+--ContextMenuIcons.ModPreferences = ContextMenuIcons.ModPreferences or {}
+--local v = ContextMenuIcons.ModPreferences
 local utils = ContextMenuIcons.Utils
-local configurations = ContextMenuIcons.configurations
 
 ContextMenuIcons.preferences = ContextMenuIcons.preferences or {}
 
@@ -23,19 +21,22 @@ end
 local function getIconPackName(options)
     local packIndex = options:getOption("icons_iconpack_selection"):getValue()
     local i = 1
-        for packName, _ in pairs(configurations) do
-            if i == packIndex then
-                return packName
-            end
-            i = i + 1
+    for packName, _ in pairs(ContextMenuIcons.iconPacksList) do
+        if i == packIndex then
+            ContextMenuIcons.isIconPacksListEmpty = false
+            return packName
         end
+        i = i + 1
+    end
+    ContextMenuIcons.isIconPacksListEmpty = true
 end
 
 local function ContextMenuIconsPreferences() 
     local options = PZAPI.ModOptions:create("ContextMenuIcons", "Context Menu Icons")
     
     local comboBox = options:addComboBox("icons_iconpack_selection", getText("UI_ContextMenuIcons_IconPackSelector_Name"), getText("UI_ContextMenuIcons_IconPackSelector_Tooltip"))
-    for packName, _ in pairs(configurations) do
+
+    for packName, _ in pairs(ContextMenuIcons.iconPacksList) do
         comboBox:addItem(getText(packName), false) -- getValue(): 1
     end
 
@@ -58,15 +59,17 @@ local function ContextMenuIconsPreferences()
     end
     --]]
     function options:apply()
-        local iconPackSettings = configurations[getIconPackName(options)].settings
-        local colorData
+        local iconPackName = getIconPackName(options)
+        local iconPackSettings = nil
+        if iconPackName ~= nil and not ContextMenuIcons.isIconPacksListEmpty then
+            iconPackSettings = ContextMenuIcons.iconPacksList[iconPackName].settings
+        end 
+        local colorData = {r = 1, g = 1, b = 1, a = 1}
         if iconPackSettings and iconPackSettings.isColorable then 
             colorData = options:getOption("icons_color_picker"):getValue()
-        else
-            colorData = {r = 1, g = 1, b = 1, a = 1}
         end
         
-        ContextMenuIcons.preferences.iconPackName = getIconPackName(options)
+        ContextMenuIcons.preferences.iconPackName = iconPackName
         ContextMenuIcons.preferences.iconsColor = colorData
 
         if onApplyCallbacks then
@@ -76,11 +79,10 @@ local function ContextMenuIconsPreferences()
         end
         
         utils.log("ContextMenuIcons: Settings Applied!")
-        utils.log("Color: ", colorData.r, colorData.g, colorData.b)
     end
-end
 
-ContextMenuIconsPreferences()
+    options:apply()
+end
 
 local function applyPreferences()
     local options = PZAPI.ModOptions:getOptions("ContextMenuIcons")
@@ -89,4 +91,10 @@ local function applyPreferences()
     end
 end
 
+local function initialize()
+    ContextMenuIconsPreferences()
+    --local comboBox = PZAPI.ModOptions:getOptions("ContextMenuIcons"):getOption("icons_iconpack_selection")
+end
+
+Events.OnResetLua.Add(initialize)
 Events.OnGameStart.Add(applyPreferences)

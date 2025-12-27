@@ -13,6 +13,7 @@
         "getTexture",
         "DebugLog",
         "getDebug",
-        "DebugType"
+        "DebugType",
+        "ContextMenuIcons"
     ]
 }

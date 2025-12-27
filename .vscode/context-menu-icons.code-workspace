@@ -1,9 +1,15 @@
 {
 	"folders": [
 		{
+			"name": "Context-Menu-Icons-Core",
 			"path": ".."
 		},
 		{
+			"name": "Simple-Context-Menu-Icons",
+			"path": "../../Simple-Context-Menu-Icons"
+		},
+		{
+			"name": "lua",
 			"path": "../../../../../../../../../SteamLibrary/steamapps/common/ProjectZomboid/media/lua"
 		}
 	],

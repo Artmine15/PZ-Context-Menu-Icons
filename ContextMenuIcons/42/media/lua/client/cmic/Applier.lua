@@ -1,8 +1,8 @@
-require "Namespaces"
-require "api/Utils"
-require "api/IconHandler"
-require "iconPacks/ConfigurationList"
-require "ModPreferences"
+require "cmic/Initialization"
+require "cmic/Utils"
+require "cmic/IconHandler"
+require "cmic/ConfigurationList"
+require "cmic/ModPreferences"
 
 local utils = ContextMenuIcons.Utils
 local iconHandler = ContextMenuIcons.IconHandler
@@ -34,7 +34,9 @@ local function createIconTables(options, staticNamedIcons, dynamicNamedIcons)
 end
 
 local function createAllIconTables()
-    local iconPack = ContextMenuIcons.configurations[ContextMenuIcons.preferences.iconPackName]
+    if ContextMenuIcons.isIconPacksListEmpty then return end
+
+    local iconPack = ContextMenuIcons.iconPacksList[ContextMenuIcons.preferences.iconPackName]
 
     resetIconTables()
     createIconTables(iconPack.options.inventory, staticNamedInventoryIcons, dynamicNamedInventoryIcons)
@@ -42,7 +44,7 @@ local function createAllIconTables()
 end
 
 local function applyIcons(context, staticNamedIcons, dynamicNamedIcons)
-    if not context or not context.options then return end
+    if not context or not context.options or ContextMenuIcons.isIconPacksListEmpty then return end
 
     local iconPackName = ContextMenuIcons.preferences.iconPackName
     local iconsColor = ContextMenuIcons.preferences.iconsColor

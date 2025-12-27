@@ -1,4 +1,4 @@
-require "Namespaces"
+require "cmic/Initialization"
 
 ContextMenuIcons.Utils = ContextMenuIcons.Utils or {}
 local v = ContextMenuIcons.Utils

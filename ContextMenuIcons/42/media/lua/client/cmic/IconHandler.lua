@@ -1,12 +1,12 @@
-require "Namespaces"
-require "api/Utils"
+require "cmic/Initialization"
+require "cmic/Utils"
 
 ContextMenuIcons.IconHandler = ContextMenuIcons.IconHandler or {}
 local v = ContextMenuIcons.IconHandler
 
 local utils = ContextMenuIcons.Utils
 
-local iconsPath = "media/ui/icons";
+local iconsPath = "media/ui/iconPacks";
 function v.getIconPath(packName, iconTextureName)
     return iconsPath .. "/" .. packName .. "/" .. iconTextureName;
 end
