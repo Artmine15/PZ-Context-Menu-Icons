@@ -36,18 +36,17 @@ end
 local function createAllIconTables()
     if ContextMenuIcons.isIconPacksListEmpty then return end
 
-    local iconPack = ContextMenuIcons.iconPacksList[ContextMenuIcons.preferences.iconPackName]
-
     resetIconTables()
-    createIconTables(iconPack.options.inventory, staticNamedInventoryIcons, dynamicNamedInventoryIcons)
-    createIconTables(iconPack.options.world, staticNamedWorldIcons, dynamicNamedWorldIcons)
+    for packName, iconPack in pairs(ContextMenuIcons.iconPacksList) do
+        createIconTables(iconPack.options.inventory, staticNamedInventoryIcons, dynamicNamedInventoryIcons)
+        createIconTables(iconPack.options.world, staticNamedWorldIcons, dynamicNamedWorldIcons)
+    end
 end
 
 local function applyIcons(context, staticNamedIcons, dynamicNamedIcons)
     if not context or not context.options or ContextMenuIcons.isIconPacksListEmpty then return end
 
-    local iconPackName = ContextMenuIcons.preferences.iconPackName
-    local iconsColor = ContextMenuIcons.preferences.iconsColor
+    local iconPackList = ContextMenuIcons.iconPacksList
 
     for i = 1, #context.options do
         local option = context.options[i]
@@ -67,10 +66,10 @@ local function applyIcons(context, staticNamedIcons, dynamicNamedIcons)
 
             if details then
                 if type(details) == "string" then
-                    iconHandler.setIcon(option, iconPackName, details, iconsColor)
+                    iconHandler.setIcon(option, iconPackList, details)
                 elseif type(details) == "table" then
                     if details.iconTextureName then
-                        iconHandler.setIcon(option, iconPackName, details.iconTextureName, iconsColor)
+                        iconHandler.setIcon(option, iconPackList, details.iconTextureName)
                     end
 
                     if details.subOptions and option.subOption then
@@ -102,7 +101,6 @@ local function applyWorldIcons(player, context)
     applyIcons(context, staticNamedWorldIcons, dynamicNamedWorldIcons)
 end
 
-ContextMenuIcons.Events.OnPreferencesApplied(function() iconHandler.resetIconTexturesCache() end)
-ContextMenuIcons.Events.OnPreferencesApplied(createAllIconTables)
+Events.OnGameStart.Add(createAllIconTables)
 Events.OnFillInventoryObjectContextMenu.Add(applyInventoryIcons)
 Events.OnFillWorldObjectContextMenu.Add(applyWorldIcons)
