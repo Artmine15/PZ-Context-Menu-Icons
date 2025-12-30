@@ -13,7 +13,6 @@ ContextMenuIcons.iconPacks.redrawn.options.aliases = {
     equipPrimary = "EquipPrimary.png",
     equipSecondary = "EquipSecondary.png",
     equipTwoHands = "EquipTwoHands.png",
-    equipOnBack = "EquipOnBack.png",
     unequip = "Unequip.png",
 
     place = "Place.png",

@@ -17,7 +17,6 @@ ContextMenuIcons.iconPacks.redrawn.options.inventory = {
     ["ContextMenu_Equip_Primary"] = aliases.equipPrimary,
     ["ContextMenu_Equip_Secondary"] = aliases.equipSecondary,
     ["ContextMenu_Equip_Two_Hands"] = aliases.equipTwoHands,
-    ["ContextMenu_Equip_on_your_Back"] = aliases.equipOnBack,
     ["ContextMenu_Unequip"] = aliases.unequip,
 
     ["ContextMenu_PlaceItemOnGround"] = {
