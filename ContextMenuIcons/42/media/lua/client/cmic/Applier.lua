@@ -34,7 +34,7 @@ local function createIconTables(options, staticNamedIcons, dynamicNamedIcons)
 end
 
 local function createAllIconTables()
-    if ContextMenuIcons.isIconPacksListEmpty then return end
+    if ContextMenuIcons.isNoneIconPackSelected then return end
 
     local iconPack = ContextMenuIcons.iconPacksList[ContextMenuIcons.preferences.iconPackName]
 
@@ -44,7 +44,7 @@ local function createAllIconTables()
 end
 
 local function applyIcons(context, staticNamedIcons, dynamicNamedIcons)
-    if not context or not context.options or ContextMenuIcons.isIconPacksListEmpty then return end
+    if not context or not context.options or ContextMenuIcons.isNoneIconPackSelected then return end
 
     local iconPackName = ContextMenuIcons.preferences.iconPackName
     local iconsColor = ContextMenuIcons.preferences.iconsColor

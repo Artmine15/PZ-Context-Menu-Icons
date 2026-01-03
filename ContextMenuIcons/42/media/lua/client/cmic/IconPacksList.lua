@@ -1,10 +1,5 @@
 require "cmic/Initialization"
 
-ContextMenuIcons.isIconPacksListEmpty = false
+ContextMenuIcons.isNoneIconPackSelected = false
 
 ContextMenuIcons.iconPacksList = {}
-
---[[
-    ["simple"] = ContextMenuIcons.configurations.simple,
-    ["test"] = ContextMenuIcons.configurations.test
-    --]]

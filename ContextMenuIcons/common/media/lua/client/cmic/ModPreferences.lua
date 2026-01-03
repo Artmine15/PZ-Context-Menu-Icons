@@ -23,12 +23,12 @@ local function getIconPackName(options)
     local i = 1
     for packName, _ in pairs(ContextMenuIcons.iconPacksList) do
         if i == packIndex then
-            ContextMenuIcons.isIconPacksListEmpty = false
+            ContextMenuIcons.isNoneIconPackSelected = false
             return packName
         end
         i = i + 1
     end
-    ContextMenuIcons.isIconPacksListEmpty = true
+    ContextMenuIcons.isNoneIconPackSelected = true
 end
 
 local function ContextMenuIconsPreferences() 
@@ -36,10 +36,16 @@ local function ContextMenuIconsPreferences()
     
     local comboBox = options:addComboBox("icons_iconpack_selection", getText("UI_ContextMenuIcons_IconPackSelector_Name"), getText("UI_ContextMenuIcons_IconPackSelector_Tooltip"))
 
+    local iconPacksListSize = 0
     for packName, _ in pairs(ContextMenuIcons.iconPacksList) do
         comboBox:addItem(getText(packName), false) -- getValue(): 1
+        iconPacksListSize = iconPacksListSize + 1
     end
 
+    if iconPacksListSize == 0 then
+        comboBox:addItem(getText("UI_None"), true)
+    end
+    
     local colorPicker = options:addColorPicker("icons_color_picker",  getText("UI_ContextMenuIcons_ColorPicker_Name"), 1, 1, 1, 1,  getText("UI_ContextMenuIcons_ColorPicker_Tooltip"))
     --[[
     local function updateColorPickerState()
@@ -61,7 +67,7 @@ local function ContextMenuIconsPreferences()
     function options:apply()
         local iconPackName = getIconPackName(options)
         local iconPackSettings = nil
-        if iconPackName ~= nil and not ContextMenuIcons.isIconPacksListEmpty then
+        if iconPackName ~= nil and not ContextMenuIcons.isNoneIconPackSelected then
             iconPackSettings = ContextMenuIcons.iconPacksList[iconPackName].settings
         end 
         local colorData = {r = 1, g = 1, b = 1, a = 1}
