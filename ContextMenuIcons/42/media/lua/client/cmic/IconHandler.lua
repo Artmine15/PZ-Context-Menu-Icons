@@ -6,7 +6,7 @@ local v = ContextMenuIcons.IconHandler
 
 local utils = ContextMenuIcons.Utils
 
-local iconsPath = "media/ui/iconPacks";
+local iconsPath = "media/ui/cmi";
 function v.getIconPath(packName, iconTextureName)
     return iconsPath .. "/" .. packName .. "/" .. iconTextureName;
 end
