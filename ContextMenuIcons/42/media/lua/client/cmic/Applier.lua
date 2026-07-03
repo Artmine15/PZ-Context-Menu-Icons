@@ -23,11 +23,16 @@ local function createIconTables(options, staticNamedIcons, dynamicNamedIcons)
     for optionName, details in pairs(options) do
         local localizedText = getText(optionName)
 
+        -- Finding a "%" symbol as a placeholder for dynamic strings.
         if not string.find(localizedText, "%", 1, true) then
+            -- No "%"
             staticNamedIcons[localizedText] = details
         else
-            local pattern = localizedText:gsub("([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1")
-            pattern = pattern:gsub("%%%%%d", ".*")
+            -- "%" found. Logic to handle that type strings.
+            local pattern = localizedText:gsub("%%%d%$%w+", "DYNMARKER"):gsub("%%%d", "DYNMARKER")
+            pattern = pattern:gsub("([%^%$%(%)%%%.%[%]%*%+%-%?])", "%%%1")
+            pattern = pattern:gsub("DYNMARKER", ".*")
+            
             dynamicNamedIcons["^" .. pattern .. "$"] = details
         end
     end
