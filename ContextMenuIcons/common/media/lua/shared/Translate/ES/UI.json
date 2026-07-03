@@ -1,0 +1,6 @@
+{
+    "UI_ContextMenuIcons_IconPackSelector_Name": "Pack de iconos",
+    "UI_ContextMenuIcons_IconPackSelector_Tooltip": "Puedes seleccionar un pack de iconos que hayas instalado.",
+    "UI_ContextMenuIcons_ColorPicker_Name": "Color de los iconos",
+    "UI_ContextMenuIcons_ColorPicker_Tooltip": "Es posible que algunos packs de iconos no permitan cambiar el color."
+}
